@@ -1,0 +1,35 @@
+# Core dependencies
+torch>=2.0.0
+transformers>=4.37.0
+accelerate>=0.25.0
+
+# FastAPI backend
+fastapi>=0.104.0
+uvicorn>=0.24.0
+python-multipart>=0.0.6
+
+# LangChain
+langchain>=0.1.0
+langchain-community>=0.0.10
+langchain-core>=0.1.0
+langchain-huggingface>=0.0.1
+langchain-text-splitters>=0.0.1
+
+# Embeddings and vector store
+sentence-transformers>=2.2.2
+faiss-cpu>=1.7.4
+
+# Document processing
+PyMuPDF>=1.23.0
+python-docx>=1.1.0
+docx2txt>=0.8
+pytesseract>=0.3.10
+Pillow>=10.0.0
+
+# Multimodal (optional - for CLIP embeddings)
+# open-clip-torch>=2.20.0
+
+# Utilities
+numpy>=1.24.0
+pydantic>=2.0.0
+
