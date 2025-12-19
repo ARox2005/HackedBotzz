@@ -28,7 +28,22 @@ function ChatWindow({ selectedSources, useAllDocs }) {
         setIsLoading(true);
 
         try {
-            const filterSources = useAllDocs ? null : selectedSources;
+            // If useAllDocs is false, we filter by selectedSources
+            // If selectedSources is empty, no documents are selected - pass empty array
+            // Backend will return no results for empty filter (correct behavior)
+            const filterSources = useAllDocs ? null : (selectedSources.length > 0 ? selectedSources : []);
+
+            // Warn if no sources selected when filtering
+            if (!useAllDocs && selectedSources.length === 0) {
+                setMessages(prev => [...prev, {
+                    role: 'assistant',
+                    content: '⚠️ No documents selected. Please select at least one document from the sidebar, or enable "Use all documents".',
+                    isError: true
+                }]);
+                setIsLoading(false);
+                return;
+            }
+
             const result = await query(userMessage, filterSources);
 
             // Add assistant message

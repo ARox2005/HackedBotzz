@@ -200,8 +200,13 @@ class FAISSVectorStore:
         search_k = min(search_k, self.index.ntotal)
         
         # Normalize filter sources for comparison
+        # IMPORTANT: If filter_sources is an empty list, return no results (no docs selected)
+        # If filter_sources is None, return all results (use all docs)
         normalized_filter = None
-        if filter_sources:
+        if filter_sources is not None:  # Explicit check for None vs empty list
+            if len(filter_sources) == 0:
+                # Empty list = no documents selected, return nothing
+                return []
             normalized_filter = set()
             for src in filter_sources:
                 normalized_filter.add(src)

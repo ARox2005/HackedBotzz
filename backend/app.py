@@ -209,10 +209,13 @@ async def clear_knowledge_base():
     p = get_pipeline()
     
     try:
-        # Clear the vector store
+        # Clear the vector store in memory
         p.vector_store.clear()
         
-        # Clear the knowledge base directory
+        # Save the cleared vector store to disk
+        p.vector_store.save(p.vector_store_dir)
+        
+        # Clear the knowledge base directory (uploaded files)
         kb_dir = Path(p.knowledge_base_dir)
         if kb_dir.exists():
             for item in kb_dir.iterdir():
@@ -227,16 +230,10 @@ async def clear_knowledge_base():
             shutil.rmtree(cache_dir)
             cache_dir.mkdir(exist_ok=True)
         
-        # Clear vector store directory
-        vs_dir = Path(data_dir) / "vector_store"
-        if vs_dir.exists():
-            shutil.rmtree(vs_dir)
-            vs_dir.mkdir(exist_ok=True)
-        
-        # Clear query cache
+        # Clear query cache in memory
         p.query_cache.clear()
         
-        # Reset pipeline
+        # Force reinitialize pipeline on next request
         pipeline = None
         
         return {"success": True, "message": "Knowledge base cleared completely"}
