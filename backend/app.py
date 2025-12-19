@@ -200,6 +200,50 @@ async def clear_cache():
     return {"success": True, "message": "Cache cleared"}
 
 
+@app.post("/api/knowledge-base/clear")
+async def clear_knowledge_base():
+    """Clear all documents, embeddings, and vector store."""
+    import shutil
+    global pipeline
+    
+    p = get_pipeline()
+    
+    try:
+        # Clear the vector store
+        p.vector_store.clear()
+        
+        # Clear the knowledge base directory
+        kb_dir = Path(p.knowledge_base_dir)
+        if kb_dir.exists():
+            for item in kb_dir.iterdir():
+                if item.is_file():
+                    item.unlink()
+                elif item.is_dir():
+                    shutil.rmtree(item)
+        
+        # Clear cache directory
+        cache_dir = Path(data_dir) / "cache"
+        if cache_dir.exists():
+            shutil.rmtree(cache_dir)
+            cache_dir.mkdir(exist_ok=True)
+        
+        # Clear vector store directory
+        vs_dir = Path(data_dir) / "vector_store"
+        if vs_dir.exists():
+            shutil.rmtree(vs_dir)
+            vs_dir.mkdir(exist_ok=True)
+        
+        # Clear query cache
+        p.query_cache.clear()
+        
+        # Reset pipeline
+        pipeline = None
+        
+        return {"success": True, "message": "Knowledge base cleared completely"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to clear knowledge base: {str(e)}")
+
+
 # Run with: uvicorn app:app --reload --port 8000
 if __name__ == "__main__":
     import uvicorn

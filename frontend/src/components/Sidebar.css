@@ -7,7 +7,8 @@
     border-right: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     transition: width 0.3s ease;
 }
@@ -167,15 +168,21 @@
 
 .documents-section {
     flex: 1;
+    min-height: 150px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 1;
 }
 
 .documents-list {
     flex: 1;
+    min-height: 100px;
+    max-height: 200px;
     overflow-y: auto;
     padding-right: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .empty-text {
@@ -215,12 +222,25 @@
     border-color: rgba(255, 255, 255, 0.08);
 }
 
-.document-item input {
-    width: 16px;
-    height: 16px;
+.document-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
     accent-color: #667eea;
     flex-shrink: 0;
     cursor: pointer;
+    appearance: auto;
+    -webkit-appearance: checkbox;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(102, 126, 234, 0.5);
+    border-radius: 4px;
+    margin-right: 4px;
+}
+
+.document-item input[type="checkbox"]:checked {
+    background: #667eea;
+    border-color: #667eea;
 }
 
 .doc-name {
@@ -344,6 +364,49 @@
     to {
         transform: rotate(360deg);
     }
+}
+
+/* Selection hint */
+.selection-hint {
+    margin: 0.75rem 0 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.selected-count {
+    color: #38ef7d;
+    font-weight: 600;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Danger button */
+.danger-btn {
+    margin-top: 0.5rem;
+    background: rgba(255, 82, 82, 0.1) !important;
+    border-color: rgba(255, 82, 82, 0.3) !important;
+    color: rgba(255, 120, 120, 0.85) !important;
+}
+
+.danger-btn:hover {
+    background: rgba(255, 82, 82, 0.2) !important;
+    border-color: rgba(255, 82, 82, 0.5) !important;
+    color: #ff8a8a !important;
 }
 
 /* Responsive */

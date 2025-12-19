@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getSources, getStats, uploadDocument, deleteDocument, clearCache } from '../api';
+import { getSources, getStats, uploadDocument, deleteDocument, clearCache, clearKnowledgeBase } from '../api';
 import './Sidebar.css';
 
 function Sidebar({ selectedSources, setSelectedSources, useAllDocs, setUseAllDocs, isOpen, onClose }) {
@@ -81,6 +81,19 @@ function Sidebar({ selectedSources, setSelectedSources, useAllDocs, setUseAllDoc
         }
     };
 
+    const handleClearKnowledgeBase = async () => {
+        if (!confirm('Are you sure you want to delete ALL documents and embeddings? This cannot be undone.')) return;
+
+        try {
+            await clearKnowledgeBase();
+            showSuccess('✓ Knowledge base cleared');
+            setSelectedSources([]);
+            fetchData();
+        } catch (err) {
+            setError('Failed to clear knowledge base');
+        }
+    };
+
     const toggleSource = (path) => {
         if (selectedSources.includes(path)) {
             setSelectedSources(selectedSources.filter(s => s !== path));
@@ -130,6 +143,14 @@ function Sidebar({ selectedSources, setSelectedSources, useAllDocs, setUseAllDoc
                     />
                     <span>Use all documents</span>
                 </label>
+                {!useAllDocs && (
+                    <p className="selection-hint">
+                        👇 Select specific documents below
+                        {selectedSources.length > 0 && (
+                            <span className="selected-count"> ({selectedSources.length} selected)</span>
+                        )}
+                    </p>
+                )}
             </div>
 
             <div className="sidebar-section documents-section">
@@ -192,6 +213,9 @@ function Sidebar({ selectedSources, setSelectedSources, useAllDocs, setUseAllDoc
             <div className="sidebar-footer">
                 <button className="clear-btn" onClick={handleClearCache}>
                     🧹 Clear Cache
+                </button>
+                <button className="clear-btn danger-btn" onClick={handleClearKnowledgeBase}>
+                    🗑️ Clear All Data
                 </button>
             </div>
         </div>

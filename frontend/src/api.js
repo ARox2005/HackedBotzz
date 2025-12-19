@@ -133,3 +133,15 @@ export async function clearCache() {
     if (!response.ok) throw new Error('Failed to clear cache');
     return response.json();
 }
+
+/**
+ * Clear entire knowledge base (documents, embeddings, vector store)
+ */
+export async function clearKnowledgeBase() {
+    const response = await fetch(`${API_BASE}/knowledge-base/clear`, {
+        method: 'POST',
+    });
+
+    if (!response.ok) throw new Error('Failed to clear knowledge base');
+    return response.json();
+}
